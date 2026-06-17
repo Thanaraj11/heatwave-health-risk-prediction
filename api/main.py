@@ -34,46 +34,12 @@ app.add_middleware(
 # Load model
 try:
     predictor = RiskPredictor()
-    print("✅ Model loaded successfully")
+    print("Model loaded successfully")
 except Exception as e:
-    print(f"❌ Failed to load model: {e}")
+    print(f"Failed to load model: {e}")
     predictor = None
 
-# Request Schema
-class PatientData(BaseModel):
-    Age: int = Field(..., ge=0, le=120, description="Age in years")
-    Systolic_BP: int = Field(..., ge=50, le=250, description="Systolic blood pressure")
-    Diastolic_BP: int = Field(..., ge=30, le=150, description="Diastolic blood pressure")
-    Heart_Disease: Literal[0, 1] = Field(..., description="0=No, 1=Yes")
-    Diabetes: Literal[0, 1] = Field(..., description="0=No, 1=Yes")
-    Respiratory_Issue: Literal[0, 1] = Field(..., description="0=No, 1=Yes")
-    Outdoor_Worker: Literal[0, 1] = Field(..., description="0=No, 1=Yes")
-    Temperature_C: float = Field(..., ge=20, le=50, description="Temperature in Celsius")
-    Humidity_percent: float = Field(..., ge=0, le=100, description="Relative humidity %")
-    Gender: Literal[0, 1] = Field(..., description="0=Female, 1=Male")
-    Hydration_Level: Literal[0, 1, 2] = Field(..., description="0=Low, 1=Moderate, 2=Good")
-    
-    class Config:
-        schema_extra = {
-            "example": {
-                "Age": 65,
-                "Systolic_BP": 145,
-                "Diastolic_BP": 92,
-                "Heart_Disease": 1,
-                "Diabetes": 0,
-                "Respiratory_Issue": 1,
-                "Outdoor_Worker": 1,
-                "Temperature_C": 38.5,
-                "Humidity_percent": 65,
-                "Gender": 1,
-                "Hydration_Level": 1
-            }
-        }
-
-# Response Schema
-class PredictionResponse(BaseModel):
-    risk_level: Literal["Low", "Medium", "High"]
-    confidence: float
+from api.schemas import PatientData, PredictionResponse
 
 # Endpoints
 @app.get("/")
@@ -104,6 +70,13 @@ def predict(patient: PatientData):
         input_dict['Heat_Index'] = input_dict['Temperature_C'] + (0.12 * input_dict['Humidity_%'])
         input_dict['Hypertension'] = 1 if (input_dict['Systolic_BP'] >= 140 or input_dict['Diastolic_BP'] >= 90) else 0
         
+        # Ensure correct column order
+        feature_order = ['Age', 'Gender', 'Heart_Disease', 'Diabetes', 'Respiratory_Issue', 
+                         'Outdoor_Worker', 'Systolic_BP', 'Diastolic_BP', 'Hydration_Level', 
+                         'Temperature_C', 'Humidity_%', 'Rainfall_mm', 'Wind_Speed_kmh', 
+                         'Hypertension', 'Heat_Index']
+        input_dict = {k: input_dict[k] for k in feature_order}
+        
         result = predictor.predict_single(input_dict)
         
         return {
@@ -115,4 +88,4 @@ def predict(patient: PatientData):
         raise HTTPException(status_code=400, detail=str(e))
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8080)

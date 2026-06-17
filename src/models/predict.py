@@ -26,6 +26,8 @@ class RiskPredictor:
         Returns: risk_level (0=Low, 1=Medium, 2=High) and confidence
         """
         input_df = pd.DataFrame([patient_data])
+        if hasattr(self.model, 'feature_names_in_'):
+            input_df = input_df[self.model.feature_names_in_]
         risk = self.model.predict(input_df)[0]
         proba = self.model.predict_proba(input_df)[0]
         confidence = max(proba)
@@ -67,6 +69,8 @@ def main():
         'Outdoor_Worker': 1,
         'Temperature_C': 38.5,
         'Humidity_%': 65,
+        'Rainfall_mm': 0.0,
+        'Wind_Speed_kmh': 15.0,
         'Gender': 1,
         'Hydration_Level': 1,
         'Hypertension': 1,

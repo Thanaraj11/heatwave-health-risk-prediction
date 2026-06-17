@@ -34,7 +34,7 @@ function RiskDashboard({ predictions }) {
                 </div>
               </div>
               <div className="text-sm mt-1">
-                Temp: {pred.Temperature_C}°C | Humidity: {pred.Humidity_percent}%
+                Temp: {pred.Temperature_C}°C | Humidity: {pred.Humidity_percent}% | Rain: {pred.Rainfall_mm}mm | Wind: {pred.Wind_Speed_kmh}km/h
               </div>
               <div className="text-xs text-gray-500 mt-1">
                 Confidence: {(pred.confidence * 100).toFixed(1)}% | {pred.timestamp}

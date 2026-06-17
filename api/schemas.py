@@ -16,11 +16,13 @@ class PatientData(BaseModel):
     Outdoor_Worker: Literal[0, 1] = Field(..., description="0=No, 1=Yes")
     Temperature_C: float = Field(..., ge=20, le=50, description="Temperature in Celsius")
     Humidity_percent: float = Field(..., ge=0, le=100, description="Relative humidity %")
+    Rainfall_mm: float = Field(..., ge=0, le=500, description="Rainfall in mm")
+    Wind_Speed_kmh: float = Field(..., ge=0, le=200, description="Wind speed in km/h")
     Gender: Literal[0, 1] = Field(..., description="0=Female, 1=Male")
     Hydration_Level: Literal[0, 1, 2] = Field(..., description="0=Low, 1=Moderate, 2=Good")
     
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "Age": 65,
                 "Systolic_BP": 145,
@@ -31,6 +33,8 @@ class PatientData(BaseModel):
                 "Outdoor_Worker": 1,
                 "Temperature_C": 38.5,
                 "Humidity_percent": 65,
+                "Rainfall_mm": 0.0,
+                "Wind_Speed_kmh": 15.0,
                 "Gender": 1,
                 "Hydration_Level": 1
             }

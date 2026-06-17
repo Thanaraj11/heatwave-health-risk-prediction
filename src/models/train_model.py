@@ -97,7 +97,6 @@ def train_model(features_path, model_path, save_plots=True):
         plots_dir = Path(__file__).parent.parent.parent / "plots"
         plots_dir.mkdir(exist_ok=True)
         plt.savefig(plots_dir / "confusion_matrix.png", dpi=150, bbox_inches='tight')
-        plt.show()
         
         # Feature importance
         importance_df = pd.DataFrame({
@@ -114,7 +113,6 @@ def train_model(features_path, model_path, save_plots=True):
         plt.title('Top 10 Feature Importances')
         plt.tight_layout()
         plt.savefig(plots_dir / "feature_importance.png", dpi=150, bbox_inches='tight')
-        plt.show()
     
     # Save model
     model_path.parent.mkdir(parents=True, exist_ok=True)

@@ -12,6 +12,8 @@ function PredictionForm({ onPrediction, apiStatus }) {
     Outdoor_Worker: 0,
     Temperature_C: '',
     Humidity_percent: '',
+    Rainfall_mm: '',
+    Wind_Speed_kmh: '',
     Gender: 1,
     Hydration_Level: 1
   });
@@ -52,6 +54,8 @@ function PredictionForm({ onPrediction, apiStatus }) {
         Outdoor_Worker: 0,
         Temperature_C: '',
         Humidity_percent: '',
+        Rainfall_mm: '',
+        Wind_Speed_kmh: '',
         Gender: 1,
         Hydration_Level: 1
       });
@@ -132,6 +136,34 @@ function PredictionForm({ onPrediction, apiStatus }) {
               required
               className="w-full border rounded p-2"
               placeholder="%"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Rainfall (mm)</label>
+            <input
+              type="number"
+              step="0.1"
+              name="Rainfall_mm"
+              value={formData.Rainfall_mm}
+              onChange={handleChange}
+              required
+              className="w-full border rounded p-2"
+              placeholder="mm"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Wind Speed (km/h)</label>
+            <input
+              type="number"
+              step="0.1"
+              name="Wind_Speed_kmh"
+              value={formData.Wind_Speed_kmh}
+              onChange={handleChange}
+              required
+              className="w-full border rounded p-2"
+              placeholder="km/h"
             />
           </div>
           
